@@ -8,11 +8,30 @@
 import SwiftUI
 
 struct DetailView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State var toDo: String
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Image(systemName: "swift")
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(.orange)
+            Text("You are a Swifty Legend!")
+                .font(.largeTitle)
+                .multilineTextAlignment(.center)
+            Text(toDo)
+            Spacer()
+            Button("Get Back!") {
+                dismiss()
+            }
+            .buttonStyle(.borderedProminent)
+            
+        }
+
+        
     }
 }
 
 #Preview {
-    DetailView()
+    DetailView(toDo: "go to work")
 }
