@@ -19,15 +19,36 @@ struct ToDoListView: View {
             VStack {
                 
                 List {
+                    
                     ForEach(toDos) { toDo in
-                        NavigationLink {
-                            DetailView(toDo: toDo)
-                        } label: {
-                            Text(toDo.item)
+                        HStack {
+                            Image(systemName: toDo.isCompleted ? "checkmark.rectangle" : "rectangle")
+                                .onTapGesture {
+                                    toDo.isCompleted.toggle()
+                                    guard let _ = try? modelContext.save() else {
+                                        print("Error saving")
+                                        return
+                                    }
+                                }
+                            NavigationLink {
+                                DetailView(toDo: toDo)
+                                
+                                
+                            } label: {
+                                Text(toDo.item)
+                            }
                         }
-
+                        .font(.title2)
+                    }
+                    .onDelete { indexSet in
+                        indexSet.forEach({modelContext.delete(toDos[$0])})
+                        guard let _ = try? modelContext.save() else {
+                            print("Error saving")
+                            return
+                        }
                     }
                 }
+                
                 .fullScreenCover(isPresented: $isSheetPresented) {
                     NavigationStack {
                         DetailView(toDo: ToDo()) 
